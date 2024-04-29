@@ -11,7 +11,6 @@ import (
 	"go/token"
 	"log"
 	"os"
-	"regexp"
 
 	"golang.org/x/exp/slices"
 )
@@ -32,10 +31,9 @@ func lint(keywords []string, sources []string) int {
 		}
 
 		visitor := &Visitor{
-			fset:         fset,
-			keywords:     keywords,
-			multiUnnamed: *regexp.MustCompile("%[a-zA-Z0-9.]+"),
-			errors:       0,
+			fset:     fset,
+			keywords: keywords,
+			errors:   0,
 		}
 		ast.Walk(visitor, f)
 		totalErrors = totalErrors + visitor.errors
@@ -44,10 +42,9 @@ func lint(keywords []string, sources []string) int {
 }
 
 type Visitor struct {
-	fset         *token.FileSet
-	keywords     []string
-	multiUnnamed regexp.Regexp
-	errors       int
+	fset     *token.FileSet
+	keywords []string
+	errors   int
 }
 
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
@@ -62,9 +59,11 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 			pos := v.fset.Position(node.Pos())
 			for _, arg := range x.Args {
 				if lit, ok := arg.(*ast.BasicLit); ok && lit.Kind == token.STRING {
-					if len(v.multiUnnamed.FindAllString(lit.Value, -1)) > 1 {
-						fmt.Fprintf(os.Stderr, "%s:%d (multi-unnamed-variables) %s\n", pos.Filename, pos.Line, lit.Value)
-						v.errors = v.errors + 1
+					for _, rule := range rules {
+						if rule.Fn(lit.Value) {
+							fmt.Fprintf(os.Stderr, "%s:%d (%s) %s\n", pos.Filename, pos.Line, rule.Name, lit.Value)
+							v.errors = v.errors + 1
+						}
 					}
 				}
 			}

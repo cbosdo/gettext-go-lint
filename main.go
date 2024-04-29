@@ -5,6 +5,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -44,6 +45,8 @@ func main() {
 		},
 	}
 
+	cmd.AddCommand(newDescribeCommand())
+
 	var defaultKeywords []string
 	for _, domainPrefix := range []string{"", "D"} {
 		for _, prefix := range []string{"", "P", "N", "PN"} {
@@ -55,4 +58,22 @@ func main() {
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func newDescribeCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "describe <rule>",
+		Long: "Describe a rule using the Identifier shown in the error output",
+		Args: cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			for _, rule := range rules {
+				if rule.Name == args[0] {
+					fmt.Println(rule.Description)
+					os.Exit(0)
+				}
+			}
+			os.Exit(1)
+		},
+	}
+	return cmd
 }
