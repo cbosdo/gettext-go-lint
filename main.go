@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path"
 
@@ -30,14 +29,7 @@ func main() {
 			sources := getEnvList("INPUT_SOURCES")
 			sources = append(sources, args...)
 			if len(sources) == 0 {
-				pwd, err := os.Getwd()
-				if err != nil {
-					log.Fatalf("No sources provided and failed to get current working directory: %s", err)
-				}
-				if pwd == "/" {
-					log.Fatalln("Cannot add / as sources")
-				}
-				sources = append(sources, pwd)
+				sources = append(sources, ".")
 			}
 
 			keywords := append(flags.Keywords, getEnvList("INPUT_KEYWORDS")...)
