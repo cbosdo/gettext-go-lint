@@ -1,0 +1,13 @@
+name: "gettext-go linter"
+description: "Run checks for common mistakes in localizable strings of go code"
+author: "Cédric Bosdonnat"
+inputs:
+  sources:
+    description: "comma-separate list of files and folders to analyze"
+    required: false
+  keywords:
+    description: "comma-separated list of gettext function names to extract strings from"
+    required: false
+runs:
+  using: "docker"
+  image: "Dockerfile"

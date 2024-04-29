@@ -16,8 +16,9 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func lint(flags *Flags, files []string) int {
+func lint(keywords []string, sources []string) int {
 	totalErrors := 0
+	files := resolveFiles(sources)
 	for _, file := range files {
 		src, err := os.ReadFile(file)
 		if err != nil {
@@ -32,7 +33,7 @@ func lint(flags *Flags, files []string) int {
 
 		visitor := &Visitor{
 			fset:         fset,
-			keywords:     flags.Keywords,
+			keywords:     keywords,
 			multiUnnamed: *regexp.MustCompile("%[a-zA-Z0-9.]+"),
 			errors:       0,
 		}
@@ -56,20 +57,28 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 
 	switch x := node.(type) {
 	case *ast.CallExpr:
-		id, ok := x.Fun.(*ast.Ident)
-		if ok {
-			if slices.Contains(v.keywords, id.Name) {
-				pos := v.fset.Position(node.Pos())
-				for _, arg := range x.Args {
-					if lit, ok := arg.(*ast.BasicLit); ok && lit.Kind == token.STRING {
-						if len(v.multiUnnamed.FindAllString(lit.Value, -1)) > 1 {
-							fmt.Printf("%s:%d (multi-unnamed-variables) %s\n", pos.Filename, pos.Line, lit.Value)
-							v.errors = v.errors + 1
-						}
+		name := getCallName(x)
+		if slices.Contains(v.keywords, name) {
+			pos := v.fset.Position(node.Pos())
+			for _, arg := range x.Args {
+				if lit, ok := arg.(*ast.BasicLit); ok && lit.Kind == token.STRING {
+					if len(v.multiUnnamed.FindAllString(lit.Value, -1)) > 1 {
+						fmt.Fprintf(os.Stderr, "%s:%d (multi-unnamed-variables) %s\n", pos.Filename, pos.Line, lit.Value)
+						v.errors = v.errors + 1
 					}
 				}
 			}
 		}
 	}
 	return v
+}
+
+func getCallName(call *ast.CallExpr) string {
+	switch x := call.Fun.(type) {
+	case *ast.Ident:
+		return x.Name
+	case *ast.SelectorExpr:
+		return x.Sel.Name
+	}
+	return ""
 }

@@ -1,6 +1,6 @@
 module github.com/cbosdo/gettext-go-lint
 
-go 1.21.9
+go 1.20
 
 require github.com/spf13/cobra v1.8.0
 
