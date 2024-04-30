@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 SUSE LLC
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: "gettext-go linter"
 description: "Run checks for common mistakes in localizable strings of go code"
 author: "Cédric Bosdonnat"
