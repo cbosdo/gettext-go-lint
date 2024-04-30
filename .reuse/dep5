@@ -16,3 +16,19 @@ License: Apache-2.0
 Files: go.sum
 Copyright: 2024 SUSE LLC
 License: Apache-2.0
+
+Files: gettext-go-lint.spec
+Copyright: 2024 SUSE LLC
+License: Apache-2.0
+
+Files: gettext-go-lint.changes* 
+Copyright: 2024 SUSE LLC
+License: Apache-2.0
+
+Files: .tito/tito.props
+Copyright: 2023 SUSE LLC
+License: Apache-2.0
+
+Files: .tito/packages/*
+Copyright: 2024 SUSE LLC
+License: Apache-2.0

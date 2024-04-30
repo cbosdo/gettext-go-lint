@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version = "0.0.0"
+
 type Flags struct {
 	Keywords []string
 }
@@ -27,7 +29,7 @@ func main() {
 
 Rules:
 ` + getRulesDescriptions(),
-		Version:      "0.0.1",
+		Version:      Version,
 		SilenceUsage: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			sources := getEnvList("INPUT_SOURCES")

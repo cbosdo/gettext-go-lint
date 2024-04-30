@@ -45,6 +45,7 @@ jobs:
           mkdir -p ./bin
           go build \
             -o ./bin \
+            -ldflags "-X main.Version=${{ env.VERSION }}"
 
       - name: Test with the Go CLI
         run: go test ./...
