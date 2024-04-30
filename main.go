@@ -58,9 +58,9 @@ func newDescribeCommand() *cobra.Command {
 		Long: "Describe a rule using the Identifier shown in the error output",
 		Args: cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			for _, rule := range rules {
-				if rule.Name == args[0] {
-					fmt.Println(rule.Description)
+			for _, rule := range allRules {
+				if rule.Name() == args[0] {
+					fmt.Println(rule.Description())
 					os.Exit(0)
 				}
 			}
