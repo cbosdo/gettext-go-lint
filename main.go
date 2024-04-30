@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -21,8 +22,11 @@ func main() {
 
 	name := path.Base(os.Args[0])
 	cmd := &cobra.Command{
-		Use:          name + " file.go ...",
-		Long:         "Check localizable strings for common issues",
+		Use: name + " file.go ...",
+		Long: `Check localizable strings for common issues.
+
+Rules:
+` + getRulesDescriptions(),
 		Version:      "0.0.1",
 		SilenceUsage: true,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -37,8 +41,6 @@ func main() {
 		},
 	}
 
-	cmd.AddCommand(newDescribeCommand())
-
 	var defaultKeywords []string
 	for _, domainPrefix := range []string{"", "D"} {
 		for _, prefix := range []string{"", "P", "N", "PN"} {
@@ -52,20 +54,13 @@ func main() {
 	}
 }
 
-func newDescribeCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:  "describe <rule>",
-		Long: "Describe a rule using the Identifier shown in the error output",
-		Args: cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			for _, rule := range allRules {
-				if rule.Name() == args[0] {
-					fmt.Println(rule.Description())
-					os.Exit(0)
-				}
-			}
-			os.Exit(1)
-		},
+func getRulesDescriptions() string {
+	description := ""
+	for _, rule := range allRules {
+		description += fmt.Sprintf(`  %s
+    %s
+
+`, rule.Name(), strings.ReplaceAll(rule.Description(), "\n", "\n    "))
 	}
-	return cmd
+	return description
 }
