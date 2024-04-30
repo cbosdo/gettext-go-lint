@@ -27,6 +27,8 @@ URL:            https://github.com/cbosdo/gettext-go-lint
 Source0:        %{name}-%{version}.tar.gz
 Source1:        vendor.tar.gz
 
+%define go_bin  go
+
 # Get the proper Go version on different distros
 %if 0%{?suse_version}
 BuildRequires:  golang(API) >= 1.20
@@ -34,8 +36,15 @@ BuildRequires:  golang(API) >= 1.20
 # 0%{?suse_version}
 
 %if 0%{?ubuntu}
+%if 0%{?ubuntu} > 2204
+%define go_version      1.22
+%else
 %define go_version      1.20
+%endif
+# 0%{?ubuntu} > 2204
+
 BuildRequires:  golang-%{go_version}
+%define go_bin  /usr/lib/go-%{go_version}/bin/go
 %endif
 # 0%{?ubuntu}
 
@@ -57,7 +66,7 @@ A tool checking for gettext localized strings common mistakes in go source code.
 %autosetup -p1 -a1
 
 %build
-go build -mod=vendor -buildmode=pie -ldflags="-X main.Version=%{version}"
+%{go_bin} build -mod=vendor -buildmode=pie -ldflags="-X main.Version=%{version}"
 
 %install
 install -D -m0755 %{name} %{buildroot}/%{_bindir}/%{name}
