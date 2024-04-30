@@ -17,7 +17,7 @@
 
 
 Name:           gettext-go-lint
-Version:        0.0.1
+Version:        0.1.0
 Release:        0
 Summary:        Check for common mistakes in gettext localizable strings in go code.
 License:        Apache-2.0

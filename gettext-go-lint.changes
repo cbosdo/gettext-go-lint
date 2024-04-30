@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Apr 30 14:08:31 CEST 2024 - cbosdonnat@suse.com
+
+- version 0.1.0-0
+  * Detect similar strings
+  * Detect use of three dots instead of ellipsis character
+  * Detect multiple unnamed variables
+
+-------------------------------------------------------------------
 Tue Apr 30 10:15:46 UTC 2024 - Cédric Bosdonnat <cbosdonnat@suse.com>
 
 - Initial version of gettext-go-lint 0.0.1
