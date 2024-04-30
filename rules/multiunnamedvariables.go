@@ -11,8 +11,8 @@ type multiUnnamedVariables struct {
 	matcher *regexp.Regexp
 }
 
-func (r multiUnnamedVariables) Check(str string) bool {
-	return len(r.matcher.FindAllString(str, -1)) > 1
+func (r multiUnnamedVariables) Check(str string, filePos string) (bool, string) {
+	return len(r.matcher.FindAllString(str, -1)) > 1, ""
 }
 
 func MultiUnnamedVariables() Rule {

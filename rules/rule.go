@@ -6,6 +6,6 @@ package rules
 
 type Rule interface {
 	Name() string
-	Check(str string) bool
+	Check(str string, filePos string) (bool, string)
 	Description() string
 }

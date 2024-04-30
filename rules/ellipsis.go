@@ -10,8 +10,8 @@ func Ellipsis() Rule {
 	return NewBaseRule(
 		"ellipsis",
 		"Replace the three dots with the ellipsis characters '…'",
-		func(str string) bool {
-			return strings.Contains(str, "...")
+		func(str string, filePos string) (bool, string) {
+			return strings.Contains(str, "..."), ""
 		},
 	)
 }

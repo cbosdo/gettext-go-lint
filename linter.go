@@ -60,8 +60,9 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 			for _, arg := range x.Args {
 				if lit, ok := arg.(*ast.BasicLit); ok && lit.Kind == token.STRING {
 					for _, rule := range allRules {
-						if rule.Check(lit.Value) {
-							fmt.Fprintf(os.Stderr, "%s:%d (%s) %s\n", pos.Filename, pos.Line, rule.Name(), lit.Value)
+						filePos := fmt.Sprintf("%s:%d", pos.Filename, pos.Line)
+						if matching, message := rule.Check(lit.Value, filePos); matching {
+							fmt.Fprintf(os.Stderr, "%s (%s) %s%s\n", filePos, rule.Name(), lit.Value, message)
 							v.errors = v.errors + 1
 						}
 					}

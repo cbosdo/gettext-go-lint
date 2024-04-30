@@ -19,5 +19,6 @@ func init() {
 	allRules = []rules.Rule{
 		rules.MultiUnnamedVariables(),
 		rules.Ellipsis(),
+		rules.Similar(),
 	}
 }
