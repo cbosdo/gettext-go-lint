@@ -1,0 +1,6 @@
+- id: lint
+  name: gettext-go-lint
+  description: Gettext Linter for go
+  entry: gettext-go-lint
+  types: [go]
+  language: golang
