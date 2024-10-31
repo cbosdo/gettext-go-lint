@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 31 09:51:54 CET 2024 - cbosdonnat@suse.com
+
+- version 0.1.1-0
+- version 0.1.1-0
+  * Add hook definition for pre-commit
+
+-------------------------------------------------------------------
 Tue Apr 30 14:08:31 CEST 2024 - cbosdonnat@suse.com
 
 - version 0.1.0-0
